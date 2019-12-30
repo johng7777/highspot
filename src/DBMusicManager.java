@@ -11,8 +11,6 @@ import org.json.simple.parser.ParseException;
 
 
 public class DBMusicManager {
-    public static final String NOT_FOUND = "Not Found";
-
     private JSONObject AllData;
     private JSONArray PlaylistChanges;
     
@@ -46,8 +44,11 @@ public class DBMusicManager {
     protected void processChanges() {
         try {
             for (Object change: this.PlaylistChanges) {
+            	// the following changes the Playlist
             	this.changePlaylist((JSONObject) change);
             }
+            // Now we change ALLData
+            this.AllData.put("playlists", this.Playlists);
     
         } catch(Error e) {
             // Some Error
@@ -59,7 +60,7 @@ public class DBMusicManager {
         // Permanently write new JSONObject to file
     	try {
         	FileWriter file = new FileWriter(output, false);
-        	this.Playlists.writeJSONString(file);
+        	this.AllData.writeJSONString(file);
         	file.flush();
         	file.close();
     	} catch (IOException ioe) {
